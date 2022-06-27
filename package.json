@@ -1,0 +1,25 @@
+{
+  "name": "dorm-api",
+  "version": "0.0.0",
+  "description": "Web storefront that allows students to purchase dorm supplies that get delivered to their dorm. ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andr3wV/dorm-api.git"
+  },
+  "author": "Andrew Vittiglio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andr3wV/dorm-api/issues"
+  },
+  "homepage": "https://github.com/andr3wV/dorm-api#readme",
+  "devDependencies": {
+    "body-parser": "^1.20.0",
+    "debug": "^4.3.4",
+    "express": "^4.18.1",
+    "mongoose": "^6.4.1"
+  }
+}
