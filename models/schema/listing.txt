@@ -1,0 +1,11 @@
+Object Variables: 
+
+id
+name 
+description
+postedDate
+postedBy 
+imageURL
+condition 
+
+

@@ -1,0 +1,18 @@
+bjects Needed:
+
+firstName 
+lastName
+university 
+dorm
+roomNumber
+classYear
+email
+phoneNumber
+phoneProvider
+venmo
+isAdmin
+isSuperAdmin
+hash (for password)
+creationDate
+
+ 
