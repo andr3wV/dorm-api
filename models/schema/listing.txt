@@ -3,9 +3,13 @@ Object Variables:
 id
 name 
 description
-postedDate
-postedBy 
+price
+postedBy
+tags
 imageURL
 condition 
+approvedDate
+availability
 
 
+//every user(student) can post a listing and also buy a listing.
