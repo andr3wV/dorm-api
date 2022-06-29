@@ -15,6 +15,7 @@ var userSchema = new Schema ({
 	isAdmin: Boolean,  
 	isSuperAdmin: Boolean, 
 	hash: String, 
+	password: String, 
 	creationDate: Date
 	}, 
 	{
