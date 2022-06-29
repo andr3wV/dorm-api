@@ -1,47 +1,34 @@
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema; 
 
-const config = require('./models/config'); //populates global vars
+var userSchema = new Schema ({
+	//define what the data inputs should be here (aka the Schema)!
 
-var app = express(); 
+	}, 
+	{
+        toObject: { getters: true },
+        timestamps: {
+            createdAt: 'createdDate',
+            updatedAt: 'updatedDate'
+        },
+    }
 
-// log if in dev mode
-if (app.get('env') === 'development') var dev = true;
-
-if (dev) app.use(logger('dev'));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-//================================================
-// Routes
-//================================================
+);
 
 
-// handle 404
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+userSchema.pre('save', function(callback){
+	//run hook code
+ 
+	callback();
 });
 
-// development error handler
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        console.log(err);
-        res.status(err.status || 500).send();
-    });
-}
 
-// production error handler
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500).send();
-});
+//create any methods
+userSchema.methods.greet = function(){
+	console.log('hi');
 
-var server = app.listen(config.port);
-console.log('Listening at http://localhost:%s in %s mode',
-    server.address().port, app.get('env'));
+};
 
-module.exports = app;
+var User = mongoose.model('User', userSchema);
+
+module.exports = User; 

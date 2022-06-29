@@ -4,9 +4,11 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const config = require('./models/config');
+const users = require('./controllers/users');
 
 var app = express(); 
-
+ 
+//checks $NODE_ENV for development environment (ie. not production)
 if (app.get('env') === 'development') var dev = true;
 
 // log if in dev mode
@@ -15,9 +17,15 @@ if (dev) app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// db for now
+var userDB = [];
+
+
 //================================================
 // Routes
 //================================================
+
+app.post('/users', users.createUser);
 
 
 // handle 404
