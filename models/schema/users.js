@@ -61,7 +61,7 @@ userSchema.pre('save', function(callback){
 
 //create any methods
 userSchema.methods.greet = function(){
-	console.log('hi');
+	console.log('hi' + this.firstname);
 };
 
 // TODO create method to check hashed password
