@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema; 
 
-var userSchema = new Schema ({
+var listingSchema = new Schema ({
 	//define what the data inputs should be here (aka the Schema)!
 	id: {type: Number, required: true}, 
 	name: {type: String, required: true}, 
@@ -27,23 +27,30 @@ var userSchema = new Schema ({
 
 );
 
-userSchema.pre('save', function(callback){
+listingSchema.pre('save', function(callback){
 	//run hook code
  	if(!this.availability){
-
-	this.availability = true;  
-
+		this.availability = true;  
 	}
-
+	// ensure url starts with http://, https://, ftp://
+    if (this.url && !(/^((https?)|(ftp)):\/\/.+/.test(this.url))){
+        this.url = 'http://' + this.url;
+    }
+    
 	callback();
 });
+couponSchema.pre('save', function(callback) {
+    // ensure url starts with http://, https://, ftp://
+    if (this.url && !(/^((https?)|(ftp)):\/\/.+/.test(this.url)))
+        this.url = 'http://' + this.url;
+    // update startDate on approval
+    if (this.isModified('approvedDate') && this.approvedDate > this.startDate)
+        this.startDate = this.approvedDate;
 
-//create any methods
-userSchema.methods.greet = function(){
-	console.log('hi');
+    callback();
+});
 
-};
 
-var User = mongoose.model('User', userSchema);
+var Listing = mongoose.model('Listing', listingSchema);
 
-module.exports = User; 
+module.exports = Listing; 

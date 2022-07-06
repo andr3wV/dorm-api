@@ -30,12 +30,14 @@ var userSchema = new Schema ({
 
 );
 
-//runs code before we save 
+//runs before save -- hash if admin, ensure phone and provider if not
 userSchema.pre('save', function(callback){
 	//run hook code
- 	if(this.isAdmin){ 
-		if(!this. hash && !this.password){
-			throw new Error("Password required for Admnins");
+ 	if(this.isAdmin || this.isSuperAdmin){ 
+		if(!this.email)
+			return callback(new Error('Missing Email!'));
+		if(!this. hash){
+			return callback(new Error("Missing Password: Password required for admins"));
 		}
 		this.hash = this.hash || this.password;
 	
@@ -45,14 +47,28 @@ userSchema.pre('save', function(callback){
 	//non-admin requirements
 	else{
 		if (!this.phone){
-			throw new Error('Missing Phone');
+			return callback(new Error('Missing Phone'));
 		}
-		
-		// TODO check that phone number is real 
-
         	if (!this.phoneProvider){
-			throw new Error ('Missing Phone Provider');
+			return callback(new Error ('Missing Phone Provider'));
 		}	
+	}
+	
+	//validate phone
+	if (this.phone){
+		if(typeof this.phone !== 'string'){
+			return callback(new Error('Invalid phone number'));
+		}
+		var phone = '';
+		for(car i = 0; i<this.phone.length; i++){
+			if(!isNan(this.phone[i])){
+				phone += this.phone[i];
+			}
+		}
+		if(phone.length !== 10){
+			return callback(new Error('Invalid phone number'));
+		}
+		this.phone = phone; 
 	}
 
 	callback() 
@@ -60,16 +76,27 @@ userSchema.pre('save', function(callback){
 
 
 //create any methods
-userSchema.methods.greet = function(){
-	console.log('hi' + this.firstname);
-};
+userSchema.virtual('name').get(function() {
+	var name = "";
+	if (this.firstName) {
+        	name = this.firstName;
+        	if (this.lastName) {
+			name += ' ' + this.lastName;
+    		}
+
+    } 
+    else if (this.lastName) {
+   	 name = this.lastName;
+    }
+    return name;
+});
 
 // TODO create method to check hashed password
 
-userSchema.methods.checkPassword = function(pw){
-	return  this.hash===pw; 
+userSchema.methods.comparePassword = function(pw){
+	return  (this.hash===pw); 
 }
 
 var User = mongoose.model('User', userSchema);
-
+	
 module.exports = User; 
