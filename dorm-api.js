@@ -8,6 +8,8 @@ const users = require('./controllers/users');
 
 var app = express(); 
 
+mongoose.connect('localhost:5000');
+
 //checks $NODE_ENV for development environment (ie. not production)
 if (app.get('env') === 'development') var dev = true;
 
@@ -22,7 +24,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Routes
 //================================================
 app.get('/users', users.getUsers);
-// this should merge conflict
 app.get('/users/:id', users.getUserById);
 app.post('/users', users.createUser);
 
@@ -34,16 +35,14 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-// development error handler
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        console.log(err);
-        res.status(err.status || 500).send();
-    });
-}
+//another error handler
+app.use(function(err, req, res, next){
+    console.log('oops');
+    next(err);
+});
 
-// production error handler
 app.use(function(err, req, res, next) {
+    console.log(err);
     res.status(err.status || 500).send();
 });
 
