@@ -2,12 +2,12 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
+const mongoose = require('mongoose');
 const config = require('./models/config');
 const users = require('./controllers/users');
 
 var app = express(); 
- 
+
 //checks $NODE_ENV for development environment (ie. not production)
 if (app.get('env') === 'development') var dev = true;
 
@@ -17,20 +17,19 @@ if (dev) app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// db for now
-var userDB = [];
-
 
 //================================================
 // Routes
 //================================================
-
+app.get('/users', users.getUsers);
+// this should merge conflict
+app.get('/users/:id', users.getUserById);
 app.post('/users', users.createUser);
-
 
 // handle 404
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
+    //who knows
     err.status = 404;
     next(err);
 });
